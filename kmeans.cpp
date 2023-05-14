@@ -40,8 +40,9 @@ int main() {
     double centroid_B_y = B_y[0];
     double tol = 0.001;
 
+    //start of algorithm
     while(tol>0.001) {
-        
+
     }
 
     gp << "set xrange [-2:10]\nset yrange [-2:10]\n";
