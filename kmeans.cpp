@@ -7,6 +7,7 @@
 #include <tuple>
 
 typedef std::vector<double> VecD;
+using namespace std;
 
 void initSets(VecD& A_x, VecD& A_y) {
     
@@ -32,6 +33,10 @@ int main() {
     VecD A_y;
     VecD B_x;
     VecD B_y;
+    VecD A_x_new;
+    VecD B_x_new;
+    VecD A_y_new;
+    VecD B_y_new;
     
     initSets(A_x, A_y);
     double centroid_A_x = A_x[0];
@@ -42,7 +47,22 @@ int main() {
 
     //start of algorithm
     while(tol>0.001) {
+        float distanceA;
+        double distanceB;
+        for(int i=1; i<A_x.size();i++) {
+            distanceA = sqrt(pow(A_x[i]-A_x[0], 2)+(pow(A_y[i]-A_y[0], 2)));
+            distanceB = sqrt(pow(B_x[i]-B_x[0], 2)+(pow(B_y[i]-B_y[0], 2)));
 
+            if(distanceA<=distanceB) {
+                A_x_new.push_back(A_x[i]);
+                A_y_new.push_back(A_y[i]);
+            }
+            else {
+                B_x_new.push_back(B_x[i]);
+                B_y_new.push_back(B_y[i]); 
+            }
+
+        }
     }
 
     gp << "set xrange [-2:10]\nset yrange [-2:10]\n";
