@@ -9,9 +9,25 @@
 typedef std::vector<double> VecD;
 using namespace std;
 
+vector<float> calculateCentroids(VecD& setX, VecD& setY)
+{
+    float sumAx = 0;
+    float sumAy = 0;
+    for (int i=0; i<setX.size(); i++) {
+        sumAx = sumAx + setX[0];
+        sumAy = sumAy + setY[0];
+
+    }
+    float centroid_x = sumAx/setX.size();
+    float centroid_y = sumAy/setY.size();
+
+    vector<float> centroid = {centroid_x, centroid_y};
+
+    return centroid;    
+}
+
 void initSets(VecD& A_x, VecD& A_y) {
     
-
     for(double alpha=0; alpha<1; alpha+=1.0/48.0) {
         double number = (rand() % 10);
         double theta = alpha*2.0*3.14159;
@@ -61,9 +77,13 @@ int main() {
                 B_x_new.push_back(B_x[i]);
                 B_y_new.push_back(B_y[i]); 
             }
-
         }
-    }
+
+        calculateCentroids(A_x_new, A_y_new);
+        calculateCentroids(B_x_new, B_y_new);
+
+
+
 
     gp << "set xrange [-2:10]\nset yrange [-2:10]\n";
     gp << "plot '-' with points title 'B',  '-' with points pt 7 lc rgb 'red' title 'A'\n";
