@@ -15,13 +15,22 @@ vector<float> calculateCentroids(VecD& setX, VecD& setY)
 {
     float sumAx = 0;
     float sumAy = 0;
-    for (int i=0; i<setX.size(); i++) {
-        sumAx = sumAx + setX[0];
-        sumAy = sumAy + setY[0];
+    float centroid_x;
+    float centroid_y;
+    if(setX.size() != 0) {
+        for (int i=0; i<setX.size(); i++) {
+        sumAx = sumAx + setX[i];
+        sumAy = sumAy + setY[i];
 
+        }
+        centroid_x = sumAx/setX.size();
+        centroid_y = sumAy/setY.size();
     }
-    float centroid_x = sumAx/setX.size();
-    float centroid_y = sumAy/setY.size();
+    else {
+        centroid_x = 0.0;
+        centroid_y = 0.0;
+    }
+    
 
     vector<float> centroid = {centroid_x, centroid_y};
 
@@ -29,14 +38,33 @@ vector<float> calculateCentroids(VecD& setX, VecD& setY)
 }
 
 void initSets(VecD& A_x, VecD& A_y) {
-    
-    for(double alpha=0; alpha<1; alpha+=1.0/48.0) {
+    int variant = 1;
+
+    if(variant == 0) {
+        for(double alpha=0; alpha<1; alpha+=1.0/48.0) {
         double number = (rand() % 10);
         double theta = alpha*2.0*3.14159;
 
         A_x.push_back( cos(theta)*0.4 + number);
         A_y.push_back( sin(theta)*0.4 + number);
+        }
     }
+    else if(variant == 1) {
+        for(int alpha=0; alpha<75; alpha+=1) {
+        double number = (rand() % 10);
+
+        if(alpha < 50) {
+            A_x.push_back( 25 + number);
+            A_y.push_back( 10 + number);
+        }
+        else {
+            A_x.push_back( 75 + number);
+            A_y.push_back( 60 + number);
+        }
+        
+        }
+    }
+    
  
 }
 
@@ -76,7 +104,7 @@ int main() {
     while(count < 4) {
         float distanceA;
         double distanceB;
-        for(int i=1; i<A_x.size();i++) {
+        for(int i=0; i<A_x.size();i++) {
             distanceA = sqrt(pow(A_x[i]-centroid_A_x, 2)+(pow(A_y[i]-centroid_A_y, 2)));
             distanceB = sqrt(pow(A_x[i]-centroid_B_x, 2)+(pow(A_y[i]-centroid_B_y, 2)));
 
@@ -89,7 +117,7 @@ int main() {
                 B_y_new.push_back(A_y[i]); 
             }
         }
-        for(int i=1; i<B_x.size();i++) {
+        for(int i=0; i<B_x.size();i++) {
             distanceA = sqrt(pow(B_x[i]-centroid_A_x, 2)+(pow(B_y[i]-centroid_A_y, 2)));
             distanceB = sqrt(pow(B_x[i]-centroid_B_x, 2)+(pow(B_y[i]-centroid_B_y, 2)));
 
@@ -114,10 +142,26 @@ int main() {
         A_y = A_y_new;
         B_x = B_y_new;
         B_y = B_y_new;
+        A_x_new.clear();
+        A_y_new.clear();
+        B_x_new.clear();
+        B_y_new.clear();
         count++;
+        std::cout << "A";
         std::cout << centroid_A_x;
         std::cout << "---";
         std::cout << centroid_A_y;
+        std::cout << "---";
+        std::cout << "B";
+        std::cout << centroid_B_x;
+        std::cout << "---";
+        std::cout << centroid_B_y;
+        std::cout << "---";
+        std::cout << "lenA";
+        std::cout << A_x.size();
+        std::cout << "---";
+        std::cout << "lenB";
+        std::cout << B_x.size();
         std::cout << "---";
        
         
@@ -125,13 +169,13 @@ int main() {
         
 
 
-         VecD printcentroidx;
+        VecD printcentroidx;
         VecD printcentroidy;
         printcentroidx.push_back(centroid_A_x);
         printcentroidx.push_back(centroid_B_x);
         printcentroidx.push_back(centroid_A_y);
         printcentroidx.push_back(centroid_B_y);
-        gp << "set xrange [-2:10]\nset yrange [-2:10]\n";
+        gp << "set xrange [-2:100]\nset yrange [-2:100]\n";
         gp << "plot '-' with points title 'B',  '-' with points pt 7 lc rgb 'red' title 'A'\n";
         gp.send1d(boost::make_tuple(B_x, B_y));
         gp.send1d(boost::make_tuple(A_x, A_y));
@@ -140,4 +184,4 @@ int main() {
         
 
     
-} // very simple tool right???
+} 
